@@ -28,25 +28,15 @@ public class HelloWorld {
         FlightSqlClient sqlClient = new FlightSqlClient(client);
         System.out.println( "sqlClient: " + sqlClient);
         FlightInfo flightInfo = sqlClient.execute(query, headerOption);
-        FlightEndpoint endpoint = flightInfo.getEndpoints().get(0);
-        Ticket ticket = endpoint.getTicket();
-        System.out.println("Hello, World!");
-
-        // without bufferAllocator
-        // try {
-        //     client = FlightClient.builder()
-        //     .location(location)
-        //     .build();
-        //     System.out.println(client);
-        //     FlightSqlClient sqlClient = new FlightSqlClient(client);
-        //     System.out.println(sqlClient);
-        //     FlightInfo flightInfo = sqlClient.execute(query, headerOption);
-        //     FlightEndpoint endpoint = flightInfo.getEndpoints().get(0);
-        //     Ticket ticket = endpoint.getTicket();
-        //     System.out.println("Hello, World!");
-        // } catch (Exception e) {
-        //     System.out.println("Error creating FlightClient: " + e.getMessage());
+        // final FlightStream stream = sqlClient.getStream(flightInfo.getEndpoints().get(0).getTicket(), headerOption);
+        // while (stream.next()) {
+        //   try { final VectorSchemaRoot root = stream.getRoot(); 
+        //     System.out.println(root.contentToTSVString());
+        //   }  catch (Exception e) {
+        // // handle the exception here, e.g. print error message
+        // System.out.println("Error executing FlightSqlClient: " + e.getMessage());
+        //   }
         // } 
-
+        // stream.close();
     }
 }

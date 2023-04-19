@@ -24,8 +24,9 @@ public class HelloWorld {
         CallHeaders headers = new FlightCallHeaders();
 
         headers.insert("bucket-name", "anais-iox");
+        // headers.insert("database", "anais-iox");
         HeaderCallOption headerOption = new HeaderCallOption(headers);
-        CredentialCallOption auth = new CredentialCallOption(new BearerCredentialWriter("9cwj30lxAZWtumTys3TBJ3YyPPeIVR1SNPec_nCMYAM8NK_K5cqLxPUZSGKJg4aHIo35tUVY--6fjv9shWTAiw=="));
+        CredentialCallOption auth = new CredentialCallOption(new BearerCredentialWriter(""));
         BufferAllocator allocator = new RootAllocator(Long.MAX_VALUE);
        
         FlightClient client = FlightClient.builder(allocator, location)
@@ -35,7 +36,11 @@ public class HelloWorld {
         FlightSqlClient sqlClient = new FlightSqlClient(client);
         System.out.println( "sqlClient: " + sqlClient);
         FlightInfo flightInfo = sqlClient.execute(query, headerOption, auth);
-        // final FlightStream stream = sqlClient.getStream(flightInfo.getEndpoints().get(0).getTicket(), headerOption);
+        FlightStream stream = sqlClient.getStream(flightInfo.getEndpoints().get(0).getTicket(), headerOption, auth);
+        System.out.println( "stream: " + stream);
+        VectorSchemaRoot root = stream.getRoot();
+        System.out.println( "root: " + root);
+        System.out.println(root.contentToTSVString());
         // while (stream.next()) {
         //   try { final VectorSchemaRoot root = stream.getRoot(); 
         //     System.out.println(root.contentToTSVString());

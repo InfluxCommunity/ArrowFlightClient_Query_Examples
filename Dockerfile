@@ -27,4 +27,4 @@ COPY --from=build /app/target/classes ./classes
 COPY --from=build /app/target/dependency ./dependency
 
 # Set the entrypoint to run your Java application
-ENTRYPOINT ["java", "-cp", "classes:dependency/*", "com.example.helloworld.HelloWorld"]
+ENTRYPOINT ["java", "-cp", "classes:dependency/*", "com.example.javaexample.JavaExample"]

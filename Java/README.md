@@ -23,8 +23,11 @@ SQL queries, and retrieve data.
 
 Running the application requires the following:
 
-- **Docker**: Follow the [Docker install](https://docs.docker.com/desktop/install/) instructions for your system.
-              The Java example project uses Docker to simplify dependency management.
+- **Docker**: The example project uses Docker to ensure a consistent build environment. Follow the instructions to download and install Docker for your system:
+
+    - **macOS**: [Install Docker for macOS](https://docs.docker.com/desktop/install/mac-install/)
+    - **Linux**: [Install Docker for Linux](https://docs.docker.com/desktop/install/linux-install/)
+              
 - **Database**: The name of a Flight database to query--for example, an [InfluxDB Cloud Serverless bucket](https://docs.influxdata.com/influxdb/cloud-serverless/admin/buckets/).
 - **Host**: The hostname of the Flight server--for example, your [InfluxDB Cloud Serverless region](https://docs.influxdata.com/influxdb/cloud-serverless/reference/regions/) without the protocol("https://").
 - **Token**: An authentication `Bearer` token with _read_ permission to the database--for example, an [InfluxDB Cloud Serverless API token](https://docs.influxdata.com/influxdb/cloud-serverless/get-started/setup/).

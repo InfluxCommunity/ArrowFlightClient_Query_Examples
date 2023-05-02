@@ -26,5 +26,17 @@ WORKDIR /app
 COPY --from=build /app/target/classes ./classes
 COPY --from=build /app/target/dependency ./dependency
 
+# Set ARGs for --build-arg options passed in the build command
+ARG DATABASE_FIELD
+ARG DATABASE_NAME
+ARG HOST
+ARG TOKEN
+
+# Set run-time ENVs from ARGs
+ENV DATABASE_FIELD=${DATABASE_FIELD}
+ENV DATABASE_NAME=${DATABASE_NAME}
+ENV HOST=${HOST}
+ENV TOKEN=${TOKEN}
+
 # Set the entrypoint to run your Java application
 ENTRYPOINT ["java", "-cp", "classes:dependency/*", "com.example.javaexample.JavaExample"]

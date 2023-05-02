@@ -12,14 +12,20 @@ import io.grpc.Metadata;
 import java.net.URI;
 
 public class JavaExample {
+
+    /* Get environment variables */
+    public static final String DATABASE_FIELD = System.getenv("DATABASE_FIELD");
+    public static final String DATABASE_NAME = System.getenv("DATABASE_NAME");
+    public static final String HOST = System.getenv("HOST");
+    public static final String TOKEN = System.getenv("TOKEN");
+            
     public static void main(String[] args) {
         System.out.println("Query InfluxDB with the Java Flight SQL Client");
-        String host = "<host without https:// i.e. us-east-1-1.aws.cloud2.influxdata.com>";
         
-        String query = "SELECT *";
-        Location location = Location.forGrpcTls(host, 443);
+        String query = "SELECT * FROM home";
+        Location location = Location.forGrpcTls(HOST, 443);
 
-        CredentialCallOption auth = new CredentialCallOption(new BearerCredentialWriter("<your token>"));
+        CredentialCallOption auth = new CredentialCallOption(new BearerCredentialWriter(TOKEN));
         BufferAllocator allocator = new RootAllocator(Long.MAX_VALUE);
 
         // We're creating an interceptor here to inject the database header on every
@@ -27,7 +33,7 @@ public class JavaExample {
         FlightClientMiddleware.Factory f = info -> new FlightClientMiddleware() {
             @Override
             public void onBeforeSendingHeaders(CallHeaders outgoingHeaders) {
-                outgoingHeaders.insert("database", "<your bucket>");
+                outgoingHeaders.insert(DATABASE_FIELD, DATABASE_NAME);
             }
 
             @Override

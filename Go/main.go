@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
+	"os"
 )
 
 func main() {
@@ -23,9 +24,9 @@ func main() {
 }
 
 func dbQuery(ctx context.Context) error {
-	url := "<host url with port 433 e.g. us-east-1-1.aws.cloud2.influxdata.com:443>"
-	token := "<your token>"
-	bucket := "<your bucket>"
+	url := os.Getenv("HOST")
+	token := os.Getenv("TOKEN")
+	bucket := os.Getenv("DATABASE_NAME")
 
 	// Create a gRPC transport
 	pool, err := x509.SystemCertPool()
@@ -44,7 +45,7 @@ func dbQuery(ctx context.Context) error {
 	}
 
 	ctx = metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+token)
-	ctx = metadata.AppendToOutgoingContext(ctx, "bucket-name", bucket)
+	ctx = metadata.AppendToOutgoingContext(ctx, "database", bucket)
 
 	// Execute query
 	query := `SELECT * FROM 'measurementName'`

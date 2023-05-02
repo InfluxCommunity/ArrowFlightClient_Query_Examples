@@ -48,9 +48,8 @@ The project contains an `influxdb-build.sh` script that you can use with InfluxD
     export INFLUX_TOKEN=WIIiwererffkdfoiwe==
     ```
 
-2. Run one of the following:
-    - For Cloud Serverless: `sh ./influxdb-build.sh serverless`
-    - For Cloud Dedicated: `sh ./influxdb-build.sh dedicated`
+2. Run the following:
+    - `sh ./influxdb-build.sh build`
 
 The script builds an image with the name `javaflight`.
 

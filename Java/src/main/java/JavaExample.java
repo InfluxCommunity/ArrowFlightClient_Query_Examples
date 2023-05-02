@@ -14,7 +14,6 @@ import java.net.URI;
 public class JavaExample {
 
     /* Get environment variables */
-    public static final String DATABASE_FIELD = System.getenv("DATABASE_FIELD");
     public static final String DATABASE_NAME = System.getenv("DATABASE_NAME");
     public static final String HOST = System.getenv("HOST");
     public static final String TOKEN = System.getenv("TOKEN");
@@ -33,7 +32,7 @@ public class JavaExample {
         FlightClientMiddleware.Factory f = info -> new FlightClientMiddleware() {
             @Override
             public void onBeforeSendingHeaders(CallHeaders outgoingHeaders) {
-                outgoingHeaders.insert(DATABASE_FIELD, DATABASE_NAME);
+                outgoingHeaders.insert("database", DATABASE_NAME);
             }
 
             @Override

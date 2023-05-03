@@ -39,4 +39,4 @@ ENV HOST=${HOST}
 ENV TOKEN=${TOKEN}
 
 # Set the entrypoint to run your Java application
-ENTRYPOINT ["java", "-cp", "classes:dependency/*", "com.example.javaexample.JavaExample"]
+ENTRYPOINT ["java", "-cp", "classes:dependency/*", "com.influxdb.examples.FlightExamples"]

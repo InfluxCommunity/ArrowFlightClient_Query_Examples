@@ -1,26 +1,35 @@
 package com.example.javaexample;
+
 // Import Apache Arrow Flight SQL classes
 import io.grpc.CallOptions;
-import org.apache.arrow.flight.*;
+import io.grpc.Metadata;
+import java.net.URI;
 import org.apache.arrow.flight.auth2.BearerCredentialWriter;
+import org.apache.arrow.flight.CallHeaders;
+import org.apache.arrow.flight.CallStatus;
 import org.apache.arrow.flight.grpc.CredentialCallOption;
+import org.apache.arrow.flight.Location;
+import org.apache.arrow.flight.FlightClient;
+import org.apache.arrow.flight.FlightClientMiddleware;
+import org.apache.arrow.flight.FlightClientMiddleware.Factory;
+import org.apache.arrow.flight.FlightInfo;
+import org.apache.arrow.flight.FlightStream;
 import org.apache.arrow.flight.sql.FlightSqlClient;
 import org.apache.arrow.memory.BufferAllocator;
 import org.apache.arrow.memory.RootAllocator;
 import org.apache.arrow.vector.VectorSchemaRoot;
-import io.grpc.Metadata;
-import java.net.URI;
 
 public class JavaExample {
 
     /* Get environment variables */
+    public static final String DATABASE_FIELD = System.getenv("DATABASE_FIELD");
     public static final String DATABASE_NAME = System.getenv("DATABASE_NAME");
     public static final String HOST = System.getenv("HOST");
     public static final String TOKEN = System.getenv("TOKEN");
-            
+
     public static void main(String[] args) {
         System.out.println("Query InfluxDB with the Java Flight SQL Client");
-        
+
         String query = "SELECT * FROM home";
         Location location = Location.forGrpcTls(HOST, 443);
 
@@ -32,7 +41,7 @@ public class JavaExample {
         FlightClientMiddleware.Factory f = info -> new FlightClientMiddleware() {
             @Override
             public void onBeforeSendingHeaders(CallHeaders outgoingHeaders) {
-                outgoingHeaders.insert("database", DATABASE_NAME);
+                outgoingHeaders.insert(DATABASE_FIELD, DATABASE_NAME);
             }
 
             @Override

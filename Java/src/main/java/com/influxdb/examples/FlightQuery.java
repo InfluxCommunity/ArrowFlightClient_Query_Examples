@@ -22,7 +22,8 @@ public class FlightQuery {
     public static final String HOST = System.getenv("HOST");
     public static final String TOKEN = System.getenv("TOKEN");
 
-    public static void main(String[] args) {
+    public static void main() {
+
         System.out.println("Query InfluxDB with the Java Flight SQL Client");
 
         // Create an interceptor that injects header metadata (database name) in every request.

@@ -5,17 +5,30 @@
 #include <arrow/flight/sql/client.h>
 #include <arrow/table.h>
 #include <gflags/gflags.h>
+#include <arrow/flight/client_auth.h>
+#include <grpcpp/grpcpp.h>
+#include <grpcpp/support/channel_arguments.h>
+#include <arrow/flight/api.h>
+#include <arrow/flight/client_middleware.h>
+
 
 namespace flight = arrow::flight;
 namespace flightsql = arrow::flight::sql;
 
-DEFINE_string(host, "", "The host of the Flight SQL server.");
-DEFINE_int32(port, 31337, "The port of the Flight SQL server.");
-DEFINE_string(query, "SELECT * FROM intTable WHERE value >= 0", "The query to execute.");
+const char* myhost = std::getenv("HOST");
+const char* mytoken = std::getenv("TOKEN");
+const char* mydatabase = std::getenv("DATABASE_NAME");
+
+DEFINE_string(host, myhost , "The host of the Flight SQL server.");
+DEFINE_string(token, mytoken, "The token for InfluxDB");
+DEFINE_string(database, mydatabase, "The database to query from");
+DEFINE_int32(port, 443, "The port of the Flight SQL server.");
+DEFINE_string(query, "SELECT * FROM 'measurementName'", "The query to execute.");
+
 
 arrow::Status Main() {
   ARROW_ASSIGN_OR_RAISE(auto location,
-                        flight::Location::ForGrpcTcp(FLAGS_host, FLAGS_port));
+                        flight::Location::ForGrpcTls(FLAGS_host, FLAGS_port));
   std::cout << "Connecting to " << location.ToString() << std::endl;
 
   // Set up the Flight SQL client
@@ -25,6 +38,8 @@ arrow::Status Main() {
       new flightsql::FlightSqlClient(std::move(flight_client)));
 
   flight::FlightCallOptions call_options;
+  call_options.headers.emplace_back("authorization", "Bearer " + FLAGS_token);
+  call_options.headers.emplace_back("database", FLAGS_database);
 
   // Execute the query, getting a FlightInfo describing how to fetch the results
   std::cout << "Executing query: '" << FLAGS_query << "'" << std::endl;
@@ -66,3 +81,42 @@ int main(int argc, char** argv) {
   }
   return EXIT_SUCCESS;
 }
+
+
+// // Custom ClientMiddleware to include token in the authorization header
+// class HeaderAuthClientMiddleware : public arrow::flight::ClientMiddleware {
+//  public:
+//   explicit HeaderAuthClientMiddleware(const std::string& token) : token_(token) {}
+
+//   void SendingHeaders(arrow::flight::AddCallHeaders* outgoing_headers) override {
+//     outgoing_headers->AddHeader("authorization", "Bearer " + token_);
+//   }
+
+//   void ReceivedHeaders(const arrow::flight::CallHeaders& incoming_headers) override {}
+
+//   void CallCompleted(const arrow::Status& status) override {}
+
+//  private:
+//   std::string token_;
+// };
+
+// // Factory for HeaderAuthClientMiddleware
+// class HeaderAuthClientMiddlewareFactory : public arrow::flight::ClientMiddlewareFactory {
+//  public:
+//   explicit HeaderAuthClientMiddlewareFactory(const std::string& token) : token_(token) {}
+
+//   void StartCall(const arrow::flight::CallInfo& info,
+//                  std::unique_ptr<arrow::flight::ClientMiddleware>* middleware) override {
+//     *middleware = std::unique_ptr<arrow::flight::ClientMiddleware>(
+//         new HeaderAuthClientMiddleware(token_));
+//   }
+
+//  private:
+//   std::string token_;
+// };
+
+//   // Create the HeaderAuthClientMiddlewareFactory and pass it to the FlightClient
+//   std::shared_ptr<HeaderAuthClientMiddlewareFactory> auth_middleware_factory =
+//       std::make_shared<HeaderAuthClientMiddlewareFactory>(FLAGS_token);
+//   flight_client->SetClientMiddleware({auth_middleware_factory});
+

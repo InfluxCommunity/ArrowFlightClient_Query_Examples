@@ -20,6 +20,22 @@ RUN apt update \
 COPY . /app
 WORKDIR /app
 
+# Set ARGs for --build-arg options passed in the build command
+ARG DATABASE_NAME
+ARG HOST
+ARG TOKEN
+
+# Set run-time ENVs from ARGs
+ENV DATABASE_NAME=${DATABASE_NAME}
+ENV HOST=${HOST}
+ENV TOKEN=${TOKEN}
+
+# Verify ENVs
+# ARG HOST
+# RUN echo "HOST=$HOST"
+# RUN echo "TOKEN=$TOKEN"
+# RUN echo "DATABSE_NAME=$DATABASE_NAME"
+
 # Compile the source code
 RUN g++ -o myprogram main.cc -larrow_flight -larrow -lgflags  -larrow_flight_sql -std=c++17
 

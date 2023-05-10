@@ -1,11 +1,11 @@
-# Go_FlightSqlClient
+# C++_FlightSqlClient
 
-The Java example is a standalone Go application for querying
+The C++ example is a standalone C++ application for querying
 Apache Arrow Flight database servers like InfluxDB v3 using RPC and Flight SQL.
 
 ## Description
 
-The example shows how to create a Go application that uses
+The example shows how to create a C++ application that uses
 Apache Arrow Flight (`org.apache.arrow.flight`)
 and Flight SQL (`org.apache.arrow.flight.sql`) packages to 
 interact with a Flight database server.
@@ -13,7 +13,7 @@ interact with a Flight database server.
 You can use the example to connect to InfluxDB v3, execute database commands and
 SQL queries, and retrieve data.
 
-## Build and run the Go application
+## Build and run the C++ application
 
 1. [Prerequisites](#prerequisites)
 2. [Build](#build)

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
-    <artifactId>java-example</artifactId>
+    <groupId>com.influxdb</groupId>
+    <artifactId>examples</artifactId>
     <version>1.0-SNAPSHOT</version>
 
 <build>
@@ -19,7 +19,7 @@
           <manifest>
             <addClasspath>true</addClasspath>
             <classpathPrefix>lib/</classpathPrefix>
-            <mainClass>com.example.javaexample.JavaExample</mainClass>
+            <mainClass>com.influxdb.examples.FlightExamples</mainClass>
           </manifest>
         </archive>
       </configuration>
@@ -27,6 +27,7 @@
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
+        <version>3.4.1</version>
         <executions>
           <execution>
             <goals>
@@ -34,12 +35,6 @@
             </goals>
             <configuration>
               <shadedArtifactAttached>true</shadedArtifactAttached>
-              <transformers>
-                <transformer />
-                <transformer>
-                  <mainClass>com.adhoc.flight.QueryRunner</mainClass>
-                </transformer>
-              </transformers>
             </configuration>
           </execution>
         </executions>
